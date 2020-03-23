@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+		
+		<!-- Webpage Title -->
+    <title>Hello, world!</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		
+		<!-- JS -->		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <link href="https://fonts.googleapis.com/css?family=Hi+Melody&display=swap" rel="stylesheet">
+
+
+    <style>
+
+
+    *{
+      font-family: 'Hi Melody', cursive;
+    }
+    .product{
+      font-size:45px;
+
+    }
+  .spectitle{
+      color: #34d2eb;
+      font-size: 45px;
+    }
+    .spec{
+      padding: 5px 5px 10px 10px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .order{
+      padding: 5px 5px 10px 10px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    </style>
+  <script>
+    function check(){
+
+     
+
+      if($('#input-name').val()==""){
+        alert("이름");
+      }
+      else if($('#input-selection').val()=="선택")
+        alert("수량");
+      else if($('#input-address').val()=="")
+        alert("주소");
+      else if($('#input-phone').val()=="")
+        alert("전화번호")
+      else{
+        let nums= $('#input-phone').val().split('-');
+        //console.log(nums);
+        //console.log(nums.length);
+        if(nums.length!==3)
+          alert("전화번호형식")
+        else if(nums[0]=='010'
+        && Number(nums[1])<=9999&&Number(nums[1])>=0&&nums[1].length==4
+        && Number(nums[2])<=9999&&Number(nums[2])>=0&&nums[2].length==4) 
+          alert("ok");
+        else{
+          alert("전화번호형식");
+        }
+      }
+    }
+
+
+
+
+
+
+
+  </script>
+    
+
+
+
+
+
+
+  </head>
+  <body>
+
+    <img src="https://lh3.googleusercontent.com/proxy/FyzYcPhihWB73tyjU81np2qKPJep0HxeffFPnX_CFD21w2r1oSqFDNjqoCc3GucC_vFEsNQQfVGmaTZxz4TAxBvykguW9Zc9Dwl3wPufvdyPkr-E1os" alt="https://lh3.googleusercontent.com/proxy/FyzYcPhihWB73tyjU81np2qKPJep0HxeffFPnX_CFD21w2r1oSqFDNjqoCc3GucC_vFEsNQQfVGmaTZxz4TAxBvykguW9Zc9Dwl3wPufvdyPkr-E1os" class="img-thumbnail rounded mx-auto d-block">
+
+
+    
+
+    <p></p>
+    <div class="text-center">
+    <span class="product">삼다수 2.0L</span>
+    <span >가격: 1000원 / 병 (최대수량 12병)</span>
+    </div>
+    <p></p>
+
+
+<div class="jumbotron jumbotron-fluid text-center spec">
+      <div class="container">
+        <h1 class="display-4 spectitle">살아있는 물</h1>
+        <p class="lead mx-auto">지층구조적으로 제주삼다수는 외부 오염물질이 유입될 수 없는 천연적인
+           수질보호시스템(Natural Water Quality Protection System)에 의해, 매우 안정적이고 깨끗한 
+           수질을 자랑합니다. 제주삼다수는 물이 잘 침투할 수 없는 퇴적층에 의해 7~8겹 감싼 독특한 
+           지층구조로 보호되고 있어 오염원으로부터 안전할 뿐 아니라, 화산암층 사이를 흐르는 동안, 
+           약 알칼리성의 부드럽고 건강에 좋은 바나듐, 실리카 등의 미네랄을 함유한 물(지하수)로 만들어져
+            제주삼다수는 건강에 유익한 물입니다.</p>
+      </div>
+</div>
+    
+
+
+<div class="order">
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">주문자 이름</span>
+  </div>
+  <input id="input-name" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+</div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="input-selection">수량</label>
+  </div>
+  <select class="custom-select" id="input-selection">
+    <option selected>선택</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+
+  </select>
+</div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">주소</span>
+  </div>
+  <input id="input-address" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+</div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">전화번호</span>
+  </div>
+  <input id="input-phone" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+</div>
+<button onclick="check()" type="button" class="btn btn-primary btn-lg btn-block">주문하기</button>
+
+</div>
+
+
+
+  </body>
+</html>
