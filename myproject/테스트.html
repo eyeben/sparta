@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css" type="text/css">
+    <script src="https://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
+    <style type="text/css">
+        /*custom style for treeA*/
+        .my_line_mark {
+            border-top: 1px dashed orange;
+            width: 100%;
+            height: 1px;
+            position: absolute;
+            left: 50%;
+            display: none;
+        }
+
+        .main {}
+    </style>
+
+    <script>
+        var bigtreedata = [
+            {
+                id: "root", value: "Films data", open: true, data: [
+                    {
+                        id: "1", open: true, value: "The Shawshank Redemption", data: [
+                            "page1", "page2", "page3", "page4", "page5", "page6", "page7", "page8", "page9", "page10",
+                            "page11", "page12", "page13", "page14", "page15", "page16", "page17", "page18", "page19", "page20"
+                        ]
+                    },
+                    {
+                        id: "2", open: true, value: "The Godfather", data: [
+                            { id: "2.1", value: "Part 1" },
+                            { id: "2.2", value: "Part 2" }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+
+    </script>
+
+</head>
+
+<body class="main">
+
+
+    <div>
+        <script type="text/javascript" charset="utf-8">
+            var grida = {
+                view: "treetable",
+                id: "grida",
+                columns: [
+                    { id: "value", header: "Title", fillspace: true, template: "{common.treetable()} #value#" },
+                    { id: "state", header: "State", width: 100 },
+                    { id: "hours", header: "Hours", width: 100 }
+                ],
+                drag: true,
+                scroll: false,
+                url: "https://docs.webix.com/samples/15_datatable/31_treedrag/data/data.php", datatype: "xml"
+            };
+
+            var tpl = {
+                template: "<b>Drag an item</b>",
+                height: 50
+            };
+
+            webix.ready(function () {
+                webix.ui({
+                    padding: 10, rows: [
+                        tpl,
+                        grida
+                    ]
+                });
+            });
+            webix.ui({
+
+                rows: [
+                    {
+                        cols: [{},
+                        {
+
+                            view: "tree", id: "treea",
+                            select: true,
+                            drag: true,
+                            data: bigtreedata,
+
+                        }, {}
+
+                        ]
+                    }
+                ]
+
+            });
+
+            var marker = webix.html.create("div", {
+                "class": "my_line_mark"
+            }, "&nbsp");
+            document.body.appendChild(marker);
+
+            webix.extend($$("treea"), {
+                $dragMark: function (context, ev) {
+                    marker.style.display = 'none';
+
+                    if (context.target) {
+                        var pos = webix.html.offset(ev.target);
+                        var box = webix.html.offset(this.$view);
+
+                        marker.style.display = 'block';
+                        marker.style.top = pos.y + "px";
+                        marker.style.left = box.x + "px";
+                        marker.style.width = this.$view.offsetWidth + "px";
+                    }
+                }
+            }, true);
+
+
+
+
+
+
+
+
+        </script>
+
+    </div>
+</body>
+
+</html>
