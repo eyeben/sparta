@@ -1,197 +1,259 @@
 <!doctype html>
 <html lang="en">
+  <head>
+		
+		<!-- Webpage Title -->
+    <title>Hello, world!</title>
 
-<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Webpage Title -->
-  <title>Hello, world!</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		
+		<!-- JS -->		
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <link href="https://fonts.googleapis.com/css?family=Hi+Melody&display=swap" rel="stylesheet">
 
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
 
-  <!-- JS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
 
-  <!-- 구글폰트 -->
-  <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+    *{
+      font-family: 'Hi Melody', cursive;
+    }
+    .wrap{
+        width: 600px;
+        margin:auto;
 
-  <script>
-    function openclose() {
-      if ($('#posting-box').css('display') == 'block') {
-        $('#posting-box').hide();
-        $('#btn-posting-box').text('포스팅 박스 열기')
-      } else {
-        $('#posting-box').show();
-        $('#btn-posting-box').text('포스팅 박스 닫기')
-      }
+    }
+    .product{
+      font-size:45px;
+
+    }
+  .spectitle{
+      color: #34d2eb;
+      font-size: 45px;
+    }
+    .spec{
+      padding: 5px 5px 10px 10px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .order{
+      padding: 5px 5px 10px 10px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .table{
+        margin:center;
+        padding:center;
+        text-align:center;
     }
 
-    $(document).ready(function () {
-      $('#cards-box').html('');
+    </style>
+  <script type="text/javascript">
+    function check(){
+        let na=$('#input-name').val();
+        let se=$('#input-selection').val();
+        let ad=$('#input-address').val();
+        let ph=$('#input-phone').val();
+        let nums=$('#input-phone').val().split('-');
+      if(na==""){
+        alert("이름");
+        $('#input-name').focus();
+        return;
+      }
+      else if(se=="선택"){
+        alert("수량");
+        $('#input-selection').focus();
+        return;
+        }
+      else if(ad==""){
+        alert("주소");
+        $('#input-address').focus();
+        return;
+        }
+      else if(ph==""){
+        alert("전화번호")
+        $('#input-phone').focus();
+        return;
+        }
+      else{
+        if(nums.length!==3){
+          alert("전화번호형식")
+          $('#input-phone').focus();
+          return;
+        }
+        else if(nums[0]=='010'
+        && Number(nums[1])<=9999&&Number(nums[1])>=0&&nums[1].length==4
+        && Number(nums[2])<=9999&&Number(nums[2])>=0&&nums[2].length==4){
+          alert("ok");
+          }
+        else{
+          alert("전화번호형식");
+          $('#input-phone').focus();
+          return;
+        }
+      }
+      $.ajax({
+        type:"POST",
+        url:"http://localhost:5000/orders",
+        data:{name_give: na,amount_give: se,address_give: ad,phone_give: ph},
+        success: function(response){
+          if(response['result']=='success'){
+            alert(response['msg']);
+            $('#input-name').val('');
+            $('#input-selection').val('');
+            $('#input-address').val('');
+            $('#input-phone').val('');
+            window.location.reload();
+          }
+        }
+      })
+    }
+
+
+
+
+    $(document).ready(function(){
+      $('#add_here').html('');
       listing();
     });
 
-    function listing() {
+    function add_info(na,se,ad,ph){
+        let temp='<tr><th scope="row">'+na+'</th>\
+        <td>'+se+'</td>\
+        <td>'+ad+'</td>\
+        <td>'+ph+'</td>\
+      </tr>'
+        $('#add_here').append(temp)
+    }
+    function listing(){
       $.ajax({
-        type: "GET",
-        url: "/memo",
-        data: {},
-        success: function (response) {
-          if (response['result'] == 'success') {
-            alert(response['msg']);
+        type:"GET",
+        url:"http://localhost:5000/orders",
+        data:{},
+        success: function(response){
+          if(response['result']=='success'){
+            const orders=response['msg'];
+            for(const elem of orders){
+              let {name,amount,address,phone}=elem;
+              console.log(name);
+              add_info(name,amount,address,phone);
+            }
           }
         }
-      })
+    })
     }
 
-    function make_card(comment, desc, image, title, url) {
 
-    }
 
-    function posting() {
-      $.ajax({
-        type: "POST",
-        url: "/memo",
-        data: {},
-        success: function (response) { // 성공하면
-          if (response['result'] == 'success') {
-            alert(response['msg']);
-          }
-        }
-      })
-    }
+
+
+
+
   </script>
+    
 
-  <!-- style -->
-  <style type="text/css">
-    * {
-      font-family: 'Stylish', sans-serif;
-    }
 
-    .wrap {
-      width: 900px;
-      margin: auto;
-    }
 
-    .comment {
-      color: blue;
-      font-weight: bold;
-    }
 
-    .form-post {
-      max-width: 500px;
-      padding: 2rem;
-      margin: 2rem auto;
-      border-color: #e9ecef;
-      border-radius: 0.3rem;
-      border: solid;
-      display: block;
-    }
 
-    #posting-box {
-      display: none;
-    }
-  </style>
 
-</head>
+  </head>
+  <body>
+<div class="wrap">
+    <img src="http://www.jejusamdasoo.co.kr/files/editor/d2b10b91-6291-472d-b9ec-036d3794cd76.jpg" alt="https://lh3.googleusercontent.com/proxy/FyzYcPhihWB73tyjU81np2qKPJep0HxeffFPnX_CFD21w2r1oSqFDNjqoCc3GucC_vFEsNQQfVGmaTZxz4TAxBvykguW9Zc9Dwl3wPufvdyPkr-E1os" class="img-thumbnail rounded mx-auto d-block">
 
-<body>
-  <div class="wrap">
-    <div class="jumbotron">
-      <h1 class="display-4">나홀로 링크 메모장!</h1>
-      <p class="lead">중요한 링크를 저장해두고, 나중에 볼 수 있는 공간입니다</p>
-      <hr class="my-4">
-      <p class="lead">
-        <a id="btn-posting-box" onclick="openclose()" class="btn btn-primary btn-lg" href="#" role="button">포스팅박스 열기</a>
-      </p>
+
+    
+
+    <p></p>
+    <div class="text-center">
+    <span class="product">삼다수 2.0L</span>
+    <span >가격: 1000원 / 병 (최대수량 12병)</span>
     </div>
-    <div class="form-post" id="posting-box">
-      <div>
-        <div class="form-group">
-          <label for="exampleFormControlInput1">아티클 URL</label>
-          <input id="posting-url" class="form-control" placeholder="">
-        </div>
-        <div class="form-group">
-          <label for="exampleFormControlTextarea1">간단 코멘트</label>
-          <textarea id="posting-comment" class="form-control" rows="2"></textarea>
-        </div>
-        <button onclick="posting()" class="btn btn-primary">기사저장</button>
+    <p></p>
+
+
+<div class="jumbotron jumbotron-fluid text-center spec">
+      <div class="container">
+        <h1 class="display-4 spectitle">살아있는 물</h1>
+        <p class="lead mx-auto">지층구조적으로 제주삼다수는 외부 오염물질이 유입될 수 없는 천연적인
+           수질보호시스템(Natural Water Quality Protection System)에 의해, 매우 안정적이고 깨끗한 
+           수질을 자랑합니다. 제주삼다수는 물이 잘 침투할 수 없는 퇴적층에 의해 7~8겹 감싼 독특한 
+           지층구조로 보호되고 있어 오염원으로부터 안전할 뿐 아니라, 화산암층 사이를 흐르는 동안, 
+           약 알칼리성의 부드럽고 건강에 좋은 바나듐, 실리카 등의 미네랄을 함유한 물(지하수)로 만들어져
+            제주삼다수는 건강에 유익한 물입니다.</p>
       </div>
-    </div>
-    <div class="card-columns" id="cards-box">
-      <div class="card">
-        <img class="card-img-top"
-          src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-          alt="Card image cap">
-        <div class="card-body">
-          <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
-          <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-          <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top"
-          src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-          alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">여기 기사 제목이 들어가죠</h5>
-          <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-          <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top"
-          src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-          alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">여기 기사 제목이 들어가죠</h5>
-          <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-          <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top"
-          src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-          alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">여기 기사 제목이 들어가죠</h5>
-          <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-          <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top"
-          src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-          alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">여기 기사 제목이 들어가죠</h5>
-          <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-          <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-        </div>
-      </div>
-      <div class="card">
-        <img class="card-img-top"
-          src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-          alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">여기 기사 제목이 들어가죠</h5>
-          <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-          <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-        </div>
-      </div>
-    </div>
+</div>
+    
+
+
+<div class="order">
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">주문자 이름</span>
   </div>
-</body>
+  <input id="input-name" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+</div>
 
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="input-selection">수량</label>
+  </div>
+  <select class="custom-select" id="input-selection">
+    <option selected>선택</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+
+  </select>
+</div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">주소</span>
+  </div>
+  <input id="input-address" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+</div>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">전화번호</span>
+  </div>
+  <input id="input-phone" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+</div>
+<button onclick="check()" type="button" class="btn btn-primary btn-lg btn-block">주문하기</button>
+
+</div>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">이름</th>
+        <th scope="col">수량</th>
+        <th scope="col">주소</th>
+        <th scope="col">전화번호</th>
+      </tr>
+    </thead>
+    <tbody id="add_here">
+      
+    </tbody>
+  </table>
+</div>
+  </body>
 </html>
