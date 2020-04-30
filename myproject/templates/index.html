@@ -33,6 +33,7 @@
       
 
     }
+    
 
     .top-card {
 
@@ -41,6 +42,7 @@
       left: 0px;
       right: 0px;
       z-index: 100;
+     
     }
 
     .top-btn1,
@@ -71,14 +73,14 @@
     /* 여기까지윗부분 */
     .main {
       margin-top: 100px;
-
+      
     }
-    
+
 
     .close {
       display: none;
     }
-
+    
     .list-group-item.active {
       z-index: 2;
       color: black;
@@ -96,17 +98,17 @@
 
   <script type="text/javascript">
     function del() {
-      if ($('#close').css('display') == 'block') {
+      if ($('#done').css('display') == 'block') {
 
-        let x= document.getElementsByClassName('close');
-        for(i=0;i<x.length;i++)
-          x[i].style.display='none';
+        let x = document.getElementsByClassName('close');
+        for (i = 0; i < x.length; i++)
+          x[i].style.display = 'none';
         $('#done').hide();
       }
       else {
-        let x= document.getElementsByClassName('close');
-        for(i=0;i<x.length;i++)
-          x[i].style.display='block';
+        let x = document.getElementsByClassName('close');
+        for (i = 0; i < x.length; i++)
+          x[i].style.display = 'block';
         $('#done').show();
       }
     }
@@ -117,19 +119,30 @@
       $('#mentions-range').val('');
       $('#changes-range').val('');
     }
-    function remove_chunk(title){
-      let tmp='#chunk'+title;
+    function remove_chunk(title) {
+      let tmp = '#chunk' + title;
       $(tmp).remove();
       $.ajax({
-        type:"DELETE",
-        url:"http://localhost:5000/data",
-        data:{title_give:title},
-        success: function (response){
+        type: "DELETE",
+        url: "http://localhost:5000/data",
+        data: { title_give: title },
+        success: function (response) {
           if (response['result'] == 'success') {
-            }
+          }
         }
       })
     }
+
+
+    function alarm_reset() {
+      let x = document.getElementsByClassName('badge');
+      let t = x.length;
+      console.log(t);
+      for (i = 0; i < t; i++) {
+        $('#badge').remove();
+      }
+    }
+
 
     function write_data() {
       let input_form = 'n', input_title = $('#title').val(), input_url = $('#url').val(), input_keyword = $('#mentions-keyword').val(), input_range = $('#changes-range').val();
@@ -181,10 +194,69 @@
       $('#post_here').html('');
       recieve_data();
     })
-    
-    function make_chunks(form, title, url, keyword, range) {
+
+    function gangshin(title){
+      $.ajax({
+        
+        type:"POST",
+        url:"http://localhost:5000/data/update",
+        data:{give_title:title},
+        success: function(response){
+          if (response['result']=='success'){
+            console.log("gangshin");
+            window.location.reload();
+          }
+        }
+      })
+      alert("d");
+    }
+    function update_alarm() {
+
+    }
+    function its_different(form, compare1,compare2) {//자료비교 후 다른게 있으면 1을반환
+      let alarm = 0;
+      if(compare1===undefined)
+        return alarm;
+      if(compare2===undefined)
+        return alarm;
+      if (form === 'm') {
+        for (let i = 0, isin = 0; i < compare2.length; i++) {
+          for (let j = 0; j < compare1.length; j++) {
+            isin = 0;
+            if (compare2[i]==compare1[j]) {
+              isin = 1;
+              break;
+            }
+          }
+          if (isin == 0) {
+            console.log(compare1[0])
+            alarm = 1;
+            break;
+          }
+        }
+      }
+      else{
+        if(compare1.length==compare2.length){
+          for(let i=0;i<compare1.length;i++){
+            if(compare1[i]!==compare2[i]){
+              alarm=1;
+              break;
+            }
+          }
+        }
+        else
+          alarm=1;
+      }
+      console.log(alarm);
+      return alarm;
+    }
+
+    function make_chunks(form, title, url, keyword, range, compare1, compare2) {
+      let alarm_text = "";
+      if (its_different(form, compare1,compare2) === 1)
+        alarm_text = `<span id="badge" class="badge badge-pill badge-primary">!</span>`
       let temp = `<div id="chunk${title}">
-          <a role="button" class="btn btn-outline-primary btns" href="${url}"><span class="badge badge-pill badge-primary">!</span>
+          <a role="button" onclick="update_alarm(${title}); window.location.reload();" class="btn btn-outline-primary btns" href="${url}">${alarm_text}
             ${title}</a>
           <button type="button" class="close" id="close" style="display: none;" aria-label="Close" onclick="remove_chunk('${title}')">
             <span aria-hidden="true">&times;</span>
@@ -203,9 +275,9 @@
           if (response['result'] == 'success') {
             const datas = response['msg'];
             for (const elem of datas) {
-              let {form, title, url, keyword, range } = elem;
+              let { form, title, url, keyword, range, compare1,compare2} = elem;
               console.log(title);
-              make_chunks(form, title, url, keyword, range);
+              make_chunks(form, title, url, keyword, range, compare1,compare2);
             }
           }
         }
@@ -242,9 +314,9 @@
     <!-- top bar -->
     <div class="card top-card text-center top">
       <div class="card-body">
-        <button type="button" class="btn btn-outline-primary top-btn1" id="fold-folders">갱신</button>
+        <button type="button" class="btn btn-outline-primary top-btn1" onclick="gangshin('')" id="fold-folders">갱신</button>
 
-        <button type="button" class="btn btn-outline-primary top-btn2" id="reset">알림리셋</button>
+        <button type="button" class="btn btn-outline-primary top-btn2" onclick="alarm_reset()" id="reset">알림리셋</button>
 
         <button type="button" class="btn btn-success top-btn4" onclick="del()" id="done">완료</button>
 
@@ -347,19 +419,7 @@
 
       <!-- main -->
       <div id="post_here">
-        <div class="chunk">
-          <button type="button" class="btn btn-outline-primary "><span class="badge badge-primary">9</span>
-            11111111111111111111111</button>
-
-          <button type="button" class="close" id="close" aria-label="Close" onclick="remove_chunk()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <p></p>
-          <p><button type="button" class="btn btn-outline-primary ">11111111111111111111111</button></p>
-        </div>
-
-        <button type="button" class="btn btn-outline-primary ">11111111111111111111111</button>
-
+        <div class="chunk"></div>
       </div>
 
     </div>
